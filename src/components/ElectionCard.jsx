@@ -9,8 +9,7 @@ import {
   AlertCircle, 
   Trophy, 
   ShieldCheck, 
-  ChevronRight,
-  Sparkles
+  ChevronRight
 } from 'lucide-react';
 
 export default function ElectionCard({ election, onVoteClick, onViewResultsClick }) {
@@ -70,57 +69,54 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
     : null;
 
   return (
-    <div className="glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/5 flex flex-col justify-between relative group">
+    <div className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 transition-all duration-200 hover:border-slate-300 hover:shadow-md flex flex-col justify-between relative group">
       
-      {/* Glow background accent */}
-      <div className="absolute -top-12 -right-12 w-36 h-36 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-cyan-500/15 transition-all"></div>
-
       <div>
         {/* Top Badges */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
             {isActive && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 Voting Active
               </span>
             )}
             {isUpcoming && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                 <Clock className="w-3 h-3" />
                 Upcoming
               </span>
             )}
             {isClosed && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
-                <ShieldCheck className="w-3 h-3 text-cyan-400" />
-                Finalized & Certified
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                <ShieldCheck className="w-3 h-3 text-slate-600" />
+                Finalized
               </span>
             )}
 
-            <span className="text-[11px] font-mono text-slate-500">
+            <span className="text-[11px] font-mono text-slate-400">
               ID #{election.id}
             </span>
           </div>
 
           {/* Countdown timer */}
-          <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="flex items-center gap-1.5 text-xs font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
             <span>{timeLeft}</span>
           </div>
         </div>
 
         {/* Title & Description */}
-        <h3 className="text-lg font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
+        <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
           {election.title}
         </h3>
-        <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
           {election.description}
         </p>
 
         {/* Candidates Mini-Preview */}
-        <div className="mt-4 pt-3 border-t border-slate-800/80">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+        <div className="mt-4 pt-3 border-t border-slate-100">
+          <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
             Candidates ({election.candidates.length})
           </p>
           <div className="space-y-1.5">
@@ -131,25 +127,25 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
               const isWinner = winningCandidate && winningCandidate.id === cand.id;
 
               return (
-                <div key={cand.id} className="flex items-center justify-between text-xs p-1.5 rounded-lg bg-slate-900/40 border border-slate-800/60">
-                  <div className="flex items-center gap-2 truncate">
-                    <img src={cand.avatarUrl} alt={cand.name} className="w-5 h-5 rounded-full object-cover" />
-                    <span className="font-medium text-slate-200 truncate">{cand.name}</span>
+                <div key={cand.id} className="flex items-center justify-between text-xs p-2 rounded-lg bg-slate-50 border border-slate-100">
+                  <div className="flex items-center gap-2.5 truncate">
+                    <img src={cand.avatarUrl} alt={cand.name} className="w-5 h-5 rounded-full object-cover border border-slate-200" />
+                    <span className="font-semibold text-slate-800 truncate">{cand.name}</span>
                     {isWinner && (
-                      <span className="flex items-center gap-1 text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.2 rounded font-bold">
+                      <span className="flex items-center gap-1 text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded font-semibold">
                         <Trophy className="w-3 h-3" /> Winner
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0 text-slate-400 font-mono text-[11px]">
+                  <div className="flex items-center gap-2 flex-shrink-0 text-slate-500 font-mono text-[11px]">
                     <span>{cand.voteCount} votes</span>
-                    <span className="text-cyan-400">({voteShare}%)</span>
+                    <span className="text-blue-600 font-medium">({voteShare}%)</span>
                   </div>
                 </div>
               );
             })}
             {election.candidates.length > 3 && (
-              <p className="text-[11px] text-slate-500 text-center">
+              <p className="text-[11px] text-slate-400 text-center">
                 + {election.candidates.length - 3} more candidates
               </p>
             )}
@@ -158,28 +154,28 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
       </div>
 
       {/* Footer & Actions */}
-      <div className="mt-5 pt-4 border-t border-slate-800 flex flex-col gap-3">
+      <div className="mt-5 pt-4 border-t border-slate-100 flex flex-col gap-3">
         {/* User status badge */}
         <div className="flex items-center justify-between text-xs">
-          <span className="text-slate-400 flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-slate-500" />
-            Total Votes: <strong className="text-slate-200 font-mono">{election.totalVotes}</strong>
+          <span className="text-slate-500 flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-slate-400" />
+            Total Votes: <strong className="text-slate-800 font-mono">{election.totalVotes}</strong>
           </span>
 
           <div>
             {hasVoted ? (
-              <span className="inline-flex items-center gap-1 text-emerald-400 text-[11px] font-semibold">
+              <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[11px] font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 Ballot Cast
               </span>
             ) : !isWhitelisted ? (
               <span className="inline-flex items-center gap-1 text-slate-500 text-[11px]">
-                <AlertCircle className="w-3.5 h-3.5" />
-                Not Whitelisted
+                <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
+                Not Registered
               </span>
             ) : isActive ? (
-              <span className="inline-flex items-center gap-1 text-cyan-400 text-[11px] font-semibold animate-pulse">
-                Ready to Vote
+              <span className="inline-flex items-center gap-1 text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded text-[11px] font-medium">
+                Eligible to Vote
               </span>
             ) : null}
           </div>
@@ -190,7 +186,7 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
           {isActive && !hasVoted && (
             <button
               onClick={() => onVoteClick(election)}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 transition-all active:scale-[0.98]"
+              className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
             >
               <Vote className="w-4 h-4" />
               Cast Ballot
@@ -199,14 +195,14 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
 
           <button
             onClick={() => onViewResultsClick(election)}
-            className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-semibold transition-all border ${
+            className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-xs font-semibold transition-all border ${
               isActive && !hasVoted
-                ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
-                : 'flex-1 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white border-slate-700 shadow-md'
+                ? 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
+                : 'flex-1 bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-xs font-semibold'
             }`}
           >
-            <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
-            {isClosed ? 'View Certified Results' : 'Live Tally & Analytics'}
+            <BarChart3 className="w-3.5 h-3.5 text-blue-600" />
+            {isClosed ? 'View Certified Results' : 'Live Tally & Results'}
           </button>
         </div>
       </div>

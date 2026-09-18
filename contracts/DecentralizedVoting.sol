@@ -198,6 +198,19 @@ contract DecentralizedVoting {
     }
 
     /**
+     * @notice Allows any individual user/citizen to register themselves as an eligible voter for an election
+     * @param _electionId ID of the election
+     */
+    function registerAsVoter(uint256 _electionId) external {
+        require(_electionId > 0 && _electionId <= electionCount, "Election does not exist");
+        require(!elections[_electionId].isFinalized, "Election already finalized");
+        require(!isWhitelisted[_electionId][msg.sender], "You are already registered to vote in this election");
+
+        isWhitelisted[_electionId][msg.sender] = true;
+        emit VoterRegistered(_electionId, msg.sender);
+    }
+
+    /**
      * @notice Cast an anonymous, verifiable ballot
      * @param _electionId ID of the election
      * @param _candidateId Candidate voted for

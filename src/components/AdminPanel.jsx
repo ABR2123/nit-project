@@ -8,7 +8,6 @@ import {
   CheckCircle2, 
   AlertCircle, 
   ShieldCheck, 
-  Sparkles,
   Award,
   Vote,
   UserPlus
@@ -164,39 +163,39 @@ export default function AdminPanel({ onElectionCreated }) {
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
       
       {/* Top Banner */}
-      <div className="p-6 rounded-2xl glass-panel border border-slate-800 flex items-center justify-between">
+      <div className="p-6 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <span className="p-2 rounded-lg bg-blue-50 text-blue-600 border border-blue-100">
               <PlusCircle className="w-5 h-5" />
             </span>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-              Election Commissioner Studio
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Electoral Commission Studio
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Deploy decentralized elections, configure candidates, and manage voter eligibility registries.
+          <p className="text-xs text-slate-500 mt-1">
+            Deploy official elections to smart contracts, configure candidate slates, and manage voter whitelist authorization.
           </p>
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 text-xs text-slate-400 font-mono">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500 font-mono">
+          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>Admin Access Active</span>
         </div>
       </div>
 
       {/* Admin Nav Tabs */}
-      <div className="flex items-center p-1 rounded-xl bg-slate-900 border border-slate-800 w-fit">
+      <div className="flex items-center p-1 rounded-lg bg-slate-100 border border-slate-200 w-fit">
         <button
           onClick={() => {
             setActiveAdminTab('create');
             setErrorMsg('');
             setSuccessMsg('');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-all ${
             activeAdminTab === 'create'
-              ? 'bg-cyan-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Vote className="w-4 h-4" />
@@ -208,10 +207,10 @@ export default function AdminPanel({ onElectionCreated }) {
             setErrorMsg('');
             setSuccessMsg('');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-all ${
             activeAdminTab === 'whitelist'
-              ? 'bg-cyan-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <UserPlus className="w-4 h-4" />
@@ -221,30 +220,30 @@ export default function AdminPanel({ onElectionCreated }) {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5 animate-in fade-in">
-          <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2.5 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {errorMsg && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2.5 animate-in fade-in">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2.5 animate-in fade-in">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {/* CREATE ELECTION TAB */}
       {activeAdminTab === 'create' && (
-        <form onSubmit={handleCreateSubmit} className="glass-card rounded-2xl p-6 border border-slate-800 space-y-6">
+        <form onSubmit={handleCreateSubmit} className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs space-y-6">
           <div className="space-y-4">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <Vote className="w-4 h-4 text-cyan-400" />
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Vote className="w-4 h-4 text-blue-600" />
               Election Parameters
             </h2>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                 Election Title *
               </label>
               <input
@@ -252,26 +251,26 @@ export default function AdminPanel({ onElectionCreated }) {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., Global Ethereum Foundation Governance Board 2026"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none"
+                placeholder="e.g., University Governance Council Election 2026"
+                className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:ring-2 focus:ring-blue-100 focus:border-blue-600 outline-none shadow-xs"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Description & Purpose
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                Description & Scope
               </label>
               <textarea
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Detail the election scope, voting rules, and governance mandate..."
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none"
+                placeholder="Describe the election mandate, participation guidelines, and voting criteria..."
+                className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:ring-2 focus:ring-blue-100 focus:border-blue-600 outline-none shadow-xs"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                 Voting Duration
               </label>
               <div className="flex items-center gap-2">
@@ -287,8 +286,8 @@ export default function AdminPanel({ onElectionCreated }) {
                     onClick={() => setDurationDays(item.val)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                       durationDays === item.val
-                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40'
-                        : 'bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800'
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200 font-semibold'
+                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     {item.label}
@@ -299,16 +298,16 @@ export default function AdminPanel({ onElectionCreated }) {
           </div>
 
           {/* Candidates Builder */}
-          <div className="space-y-4 pt-4 border-t border-slate-800">
+          <div className="space-y-4 pt-4 border-t border-slate-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-cyan-400" />
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Users className="w-4 h-4 text-blue-600" />
                 Candidates ({candidates.length})
               </h2>
               <button
                 type="button"
                 onClick={handleAddCandidate}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-400 text-xs font-semibold border border-slate-700 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-blue-700 text-xs font-semibold border border-slate-200 transition-all shadow-xs"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 Add Candidate
@@ -317,16 +316,16 @@ export default function AdminPanel({ onElectionCreated }) {
 
             <div className="space-y-3">
               {candidates.map((cand, idx) => (
-                <div key={idx} className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3 relative group">
+                <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 relative group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
                       Candidate #{idx + 1}
                     </span>
                     {candidates.length > 2 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveCandidate(idx)}
-                        className="text-slate-500 hover:text-rose-400 text-xs p-1"
+                        className="text-slate-400 hover:text-rose-600 text-xs p-1"
                         title="Remove candidate"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -341,23 +340,23 @@ export default function AdminPanel({ onElectionCreated }) {
                       required
                       value={cand.name}
                       onChange={(e) => handleCandidateChange(idx, 'name', e.target.value)}
-                      className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white outline-none focus:border-cyan-500"
+                      className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 outline-none focus:border-blue-600"
                     />
                     <input
                       type="text"
-                      placeholder="Party or Organization"
+                      placeholder="Party / Affiliation"
                       value={cand.party}
                       onChange={(e) => handleCandidateChange(idx, 'party', e.target.value)}
-                      className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white outline-none focus:border-cyan-500"
+                      className="px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 outline-none focus:border-blue-600"
                     />
                   </div>
 
                   <textarea
                     rows={2}
-                    placeholder="Candidate manifesto, vision, or policy goals..."
+                    placeholder="Candidate statement, vision, or policy goals..."
                     value={cand.manifesto}
                     onChange={(e) => handleCandidateChange(idx, 'manifesto', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white outline-none focus:border-cyan-500"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 outline-none focus:border-blue-600"
                   />
                 </div>
               ))}
@@ -368,9 +367,9 @@ export default function AdminPanel({ onElectionCreated }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
+              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all disabled:opacity-50"
             >
-              {loading ? 'Mining Election onto Blockchain...' : 'Deploy Election to Smart Contract'}
+              {loading ? 'Recording Election on Blockchain...' : 'Deploy Election to Smart Contract'}
             </button>
           </div>
         </form>
@@ -378,25 +377,25 @@ export default function AdminPanel({ onElectionCreated }) {
 
       {/* WHITELIST REGISTRY TAB */}
       {activeAdminTab === 'whitelist' && (
-        <form onSubmit={handleWhitelistSubmit} className="glass-card rounded-2xl p-6 border border-slate-800 space-y-6">
+        <form onSubmit={handleWhitelistSubmit} className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs space-y-6">
           <div className="space-y-4">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <UserPlus className="w-4 h-4 text-cyan-400" />
-              Sybil Defense: Register Eligible Voter Addresses
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <UserPlus className="w-4 h-4 text-blue-600" />
+              Voter Eligibility Registry
             </h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              To prevent Sybil attacks and automated spam voting, only addresses registered in the election whitelist can cast ballots. Each registered address is strictly restricted to one vote.
+            <p className="text-xs text-slate-600 leading-relaxed">
+              To enforce authentic participation and prevent duplicate or automated voting, only addresses registered in the election whitelist can cast ballots. Each registered address can only vote once.
             </p>
 
             {/* Select Target Election */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                 Select Election
               </label>
               <select
                 value={selectedElectionId}
                 onChange={(e) => setSelectedElectionId(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-xs focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none"
+                className="w-full px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:ring-2 focus:ring-blue-100 focus:border-blue-600 outline-none shadow-xs"
               >
                 {elections.map(e => (
                   <option key={e.id} value={e.id}>
@@ -409,16 +408,16 @@ export default function AdminPanel({ onElectionCreated }) {
             {/* Input Addresses */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                   Voter Ethereum Addresses (one per line or comma-separated)
                 </label>
                 <button
                   type="button"
                   onClick={handleAutoWhitelistTestAccounts}
                   disabled={loading}
-                  className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold"
+                  className="text-xs text-blue-600 hover:text-blue-800 font-semibold"
                 >
-                  + Whitelist All Sandbox Test Accounts
+                  + Whitelist All Sandbox Accounts
                 </button>
               </div>
               <textarea
@@ -426,7 +425,7 @@ export default function AdminPanel({ onElectionCreated }) {
                 value={voterAddressesInput}
                 onChange={(e) => setVoterAddressesInput(e.target.value)}
                 placeholder="0x70997970C51812dc3A010C7d01b50e0d17dc79C8&#10;0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC&#10;0x90F79bf6EB2c4f870365E785982E1f101E93b906"
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 font-mono text-xs focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 text-slate-900 font-mono text-xs focus:ring-2 focus:ring-blue-100 focus:border-blue-600 outline-none shadow-xs"
               />
             </div>
           </div>
@@ -435,7 +434,7 @@ export default function AdminPanel({ onElectionCreated }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
+              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all disabled:opacity-50"
             >
               {loading ? 'Recording Whitelist on Blockchain...' : 'Commit Whitelist to Smart Contract'}
             </button>

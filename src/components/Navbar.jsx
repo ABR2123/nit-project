@@ -9,7 +9,6 @@ import {
   Wallet, 
   ChevronDown, 
   RotateCcw,
-  Sparkles,
   ExternalLink,
   CheckCircle2,
   AlertCircle,
@@ -58,40 +57,36 @@ export default function Navbar({ activeTab, setActiveTab }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           
           {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('elections')}>
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 shadow-lg shadow-cyan-500/20 text-white">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-600 text-white shadow-sm">
               <ShieldCheck className="w-5 h-5" />
-              <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-              </span>
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
-                  Aegis<span className="text-cyan-400">Vote</span>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-lg tracking-tight text-slate-900">
+                  Aegis<span className="text-blue-600">Vote</span>
                 </span>
-                <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                   {providerMode === 'REAL_BLOCKCHAIN' ? 'Live Web3' : 'Sandbox'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Decentralized E-Voting Protocol</p>
+              <p className="text-[11px] text-slate-500 hidden sm:block">Official E-Voting System</p>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1.5">
             <button
               onClick={() => setActiveTab('elections')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'elections'
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm shadow-cyan-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <Vote className="w-4 h-4" />
@@ -102,8 +97,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
               onClick={() => setActiveTab('verify')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'verify'
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm shadow-cyan-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <Search className="w-4 h-4" />
@@ -114,8 +109,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
               onClick={() => setActiveTab('ledger')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'ledger'
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm shadow-cyan-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <Layers className="w-4 h-4" />
@@ -126,8 +121,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
               onClick={() => setActiveTab('admin')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'admin'
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-sm shadow-cyan-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <PlusCircle className="w-4 h-4" />
@@ -139,13 +134,13 @@ export default function Navbar({ activeTab, setActiveTab }) {
           <div className="flex items-center gap-2">
             
             {/* Mode Switcher */}
-            <div className="flex items-center p-0.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-medium">
+            <div className="flex items-center p-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-medium">
               <button
                 onClick={() => setProviderMode('REAL_BLOCKCHAIN')}
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all ${
                   providerMode === 'REAL_BLOCKCHAIN'
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white text-blue-700 font-semibold shadow-xs border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Connect real blockchain (MetaMask / Local Hardhat Node / Sepolia)"
               >
@@ -156,8 +151,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
                 onClick={() => setProviderMode('SIMULATED')}
                 className={`px-2.5 py-1 rounded-md transition-all ${
                   providerMode === 'SIMULATED'
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white text-blue-700 font-semibold shadow-xs border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
                 title="Instant zero-setup in-browser sandbox node"
               >
@@ -174,16 +169,16 @@ export default function Navbar({ activeTab, setActiveTab }) {
                     <div className="relative">
                       <button
                         onClick={() => setShowNetworkDropdown(!showNetworkDropdown)}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:border-cyan-500/40"
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-700 hover:border-slate-300 shadow-xs"
                       >
-                        <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                         <span className="hidden sm:inline font-medium">{realNetworkName || `Chain #${realChainId}`}</span>
                         <ChevronDown className="w-3 h-3 text-slate-400" />
                       </button>
 
                       {showNetworkDropdown && (
-                        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl p-2 z-50">
-                          <p className="px-2 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Switch Real Network</p>
+                        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl p-2 z-50">
+                          <p className="px-2 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Network</p>
                           <div className="space-y-1">
                             {Object.entries(supportedNetworks).map(([cid, net]) => (
                               <button
@@ -194,12 +189,12 @@ export default function Navbar({ activeTab, setActiveTab }) {
                                 }}
                                 className={`w-full flex items-center justify-between p-2 rounded-lg text-xs text-left ${
                                   realChainId === Number(cid)
-                                    ? 'bg-cyan-500/10 text-cyan-400 font-semibold'
-                                    : 'text-slate-300 hover:bg-slate-800'
+                                    ? 'bg-blue-50 text-blue-700 font-semibold'
+                                    : 'text-slate-700 hover:bg-slate-50'
                                 }`}
                               >
                                 <span>{net.chainName}</span>
-                                {realChainId === Number(cid) && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />}
+                                {realChainId === Number(cid) && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />}
                               </button>
                             ))}
                           </div>
@@ -208,15 +203,15 @@ export default function Navbar({ activeTab, setActiveTab }) {
                     </div>
 
                     {/* Connected Account Pill */}
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-mono">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                       {shortenAddress(realAccount)}
                     </div>
                   </>
                 ) : (
                   <button
                     onClick={connectMetaMask}
-                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 transition-all"
+                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
                   >
                     <Wallet className="w-3.5 h-3.5" />
                     Connect MetaMask
@@ -226,7 +221,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
                 {/* Contract Config Button */}
                 <button
                   onClick={() => setShowConfigModal(true)}
-                  className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition-all"
+                  className="p-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all shadow-xs"
                   title="Configure Smart Contract Address"
                 >
                   <Settings className="w-4 h-4" />
@@ -237,25 +232,25 @@ export default function Navbar({ activeTab, setActiveTab }) {
               <div className="relative">
                 <button
                   onClick={() => setShowAccountDropdown(!showAccountDropdown)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-700/80 hover:border-cyan-500/40 text-xs transition-all shadow-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-xs transition-all shadow-xs"
                 >
                   <img
                     src={selectedAccount.avatar}
                     alt={selectedAccount.name}
-                    className="w-5 h-5 rounded-full object-cover border border-cyan-500/30"
+                    className="w-5 h-5 rounded-full object-cover border border-slate-200"
                   />
                   <div className="text-left hidden sm:block">
-                    <p className="font-semibold text-slate-200 truncate max-w-[120px]">{selectedAccount.name}</p>
-                    <p className="text-[10px] text-cyan-400 font-mono">{shortenAddress(selectedAccount.address)}</p>
+                    <p className="font-semibold text-slate-800 truncate max-w-[120px]">{selectedAccount.name}</p>
+                    <p className="text-[10px] text-slate-500 font-mono">{shortenAddress(selectedAccount.address)}</p>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-1" />
                 </button>
 
                 {showAccountDropdown && (
-                  <div className="absolute right-0 mt-2 w-72 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl p-2 z-50 animate-in fade-in">
-                    <div className="px-3 py-2 border-b border-slate-800">
-                      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Switch Persona</p>
-                      <p className="text-xs text-slate-500">Test voter vs commissioner roles</p>
+                  <div className="absolute right-0 mt-2 w-72 rounded-xl bg-white border border-slate-200 shadow-xl p-2 z-50 animate-in fade-in">
+                    <div className="px-3 py-2 border-b border-slate-100">
+                      <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Switch Persona</p>
+                      <p className="text-xs text-slate-400">Test voter vs administrator roles</p>
                     </div>
                     <div className="py-1 space-y-1">
                       {testAccounts.map((acc) => (
@@ -267,17 +262,17 @@ export default function Navbar({ activeTab, setActiveTab }) {
                           }}
                           className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-all ${
                             selectedAccount.id === acc.id
-                              ? 'bg-cyan-500/10 border border-cyan-500/30'
-                              : 'hover:bg-slate-800/80'
+                              ? 'bg-blue-50 border border-blue-200'
+                              : 'hover:bg-slate-50'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <img src={acc.avatar} alt={acc.name} className="w-7 h-7 rounded-full object-cover" />
+                            <img src={acc.avatar} alt={acc.name} className="w-7 h-7 rounded-full object-cover border border-slate-200" />
                             <div>
-                              <p className="text-xs font-semibold text-slate-200">{acc.name}</p>
+                              <p className="text-xs font-semibold text-slate-800">{acc.name}</p>
                               <div className="flex items-center gap-1.5">
                                 <span className={`text-[10px] px-1.5 py-0.2 rounded font-medium ${
-                                  acc.role === 'Admin' ? 'bg-amber-500/10 text-amber-400' : 'bg-blue-500/10 text-blue-400'
+                                  acc.role === 'Admin' ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-blue-50 text-blue-700 border border-blue-200'
                                 }`}>
                                   {acc.role}
                                 </span>
@@ -286,7 +281,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
                             </div>
                           </div>
                           {selectedAccount.id === acc.id && (
-                            <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-blue-600 flex-shrink-0" />
                           )}
                         </button>
                       ))}
@@ -302,42 +297,42 @@ export default function Navbar({ activeTab, setActiveTab }) {
 
       {/* Contract Address Config Modal */}
       {showConfigModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Settings className="w-4 h-4 text-cyan-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in">
+          <div className="w-full max-w-lg rounded-2xl bg-white border border-slate-200 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Settings className="w-4 h-4 text-blue-600" />
                 Smart Contract Connection
               </h3>
               <button
                 onClick={() => setShowConfigModal(false)}
-                className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded bg-slate-800"
+                className="text-slate-500 hover:text-slate-800 text-xs px-2 py-1 rounded bg-slate-100 hover:bg-slate-200"
               >
                 Close
               </button>
             </div>
 
             <form onSubmit={handleSaveContractAddress} className="space-y-4 text-xs">
-              <p className="text-slate-300 leading-relaxed">
-                Connect AegisVote to any deployed <code className="text-cyan-400">DecentralizedVoting.sol</code> contract on Sepolia, Polygon Amoy, or your local Hardhat node.
+              <p className="text-slate-600 leading-relaxed">
+                Connect to any deployed <code className="text-blue-700 font-mono bg-blue-50 px-1 py-0.5 rounded">DecentralizedVoting.sol</code> contract on Sepolia, Polygon Amoy, or your local Hardhat node.
               </p>
 
               <div className="space-y-1.5">
-                <label className="block text-slate-400 font-semibold uppercase">Contract Address</label>
+                <label className="block text-slate-700 font-semibold uppercase">Contract Address</label>
                 <input
                   type="text"
                   value={tempAddress}
                   onChange={(e) => setTempAddress(e.target.value)}
                   placeholder="0x..."
-                  className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 font-mono text-cyan-300 text-xs focus:ring-2 focus:ring-cyan-500/50 outline-none"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-300 font-mono text-slate-900 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-semibold">How to deploy locally:</span>
-                <p className="text-slate-400 font-mono text-[11px]">
-                  1. Run: <code className="text-cyan-400">npx hardhat node</code><br/>
-                  2. In another terminal: <code className="text-cyan-400">node scripts/deploy.js</code>
+                <p className="text-slate-600 font-mono text-[11px]">
+                  1. Run: <code className="text-blue-700">npx hardhat node</code><br/>
+                  2. In another terminal: <code className="text-blue-700">node scripts/deploy.js</code>
                 </p>
               </div>
 
@@ -345,13 +340,13 @@ export default function Navbar({ activeTab, setActiveTab }) {
                 <button
                   type="button"
                   onClick={() => setShowConfigModal(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs"
                 >
                   Save & Connect
                 </button>
