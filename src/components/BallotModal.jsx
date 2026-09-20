@@ -70,7 +70,7 @@ export default function BallotModal({ election, onClose, onReceiptReady }) {
   const handleDownloadReceipt = () => {
     if (!receipt) return;
     const content = `=====================================================
-AEGISVOTE DECENTRALIZED E-VOTING PROTOCOL
+MUDRA WEB3 ARCHITECTURE DECENTRALIZED E-VOTING PROTOCOL
 CRYPTOGRAPHIC BALLOT RECEIPT
 =====================================================
 Election ID: #${receipt.electionId}
@@ -86,7 +86,7 @@ Receipt Hash (SHA-256 / Keccak-256):
 ${receipt.receiptHash}
 
 VERIFICATION INSTRUCTIONS:
-Paste the receipt hash into the AegisVote "Verify Receipt" portal
+Paste the receipt hash into the Mudra Web3 Architecture "Verify Receipt" portal
 or inspect directly on-chain via smart contract method:
 verifyReceipt(${receipt.electionId}, "${receipt.receiptHash}")
 
@@ -97,7 +97,7 @@ STATUS: VALID & RECORDED IMMUTABLY ON LEDGER
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AegisVote-Receipt-Election-${receipt.electionId}.txt`;
+    a.download = `MudraWeb3-Receipt-Election-${receipt.electionId}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };

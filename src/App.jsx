@@ -96,7 +96,7 @@ export default function App() {
             <div className="p-1 rounded-md bg-blue-50 text-blue-600 border border-blue-100">
               <ShieldCheck className="w-4 h-4" />
             </div>
-            <span className="font-semibold text-slate-800">AegisVote E-Voting System</span>
+            <span className="font-semibold text-slate-800">Mudra Web3 Architecture</span>
             <span className="text-slate-300">&bull;</span>
             <span className="text-slate-500">Cryptographic Ballot Receipts & Smart Contract Verification</span>
           </div>

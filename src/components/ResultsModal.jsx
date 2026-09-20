@@ -60,7 +60,7 @@ export default function ResultsModal({ election, onClose }) {
       .join('\n');
 
     const certificate = `===============================================================
-AEGISVOTE DECENTRALIZED PROTOCOL - ELECTION AUDIT CERTIFICATE
+MUDRA WEB3 ARCHITECTURE DECENTRALIZED PROTOCOL - ELECTION AUDIT CERTIFICATE
 ===============================================================
 Election ID: #${election.id}
 Title: ${election.title}
@@ -89,7 +89,7 @@ CRYPTOGRAPHIC GUARANTEES:
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AegisVote-Audit-Certificate-Election-${election.id}.txt`;
+    a.download = `MudraWeb3-Audit-Certificate-Election-${election.id}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };

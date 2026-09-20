@@ -155,12 +155,12 @@ const INITIAL_SIMULATED_ELECTIONS = [
 export function Web3Provider({ children }) {
   // Provider mode: 'REAL_BLOCKCHAIN' (MetaMask / injected Web3 / local RPC) or 'SIMULATED'
   const [providerMode, setProviderMode] = useState(() => {
-    return localStorage.getItem('aegisvote_mode') || 'REAL_BLOCKCHAIN';
+    return localStorage.getItem('mudraweb3_mode') || localStorage.getItem('janvox_mode') || localStorage.getItem('aegisvote_mode') || 'REAL_BLOCKCHAIN';
   });
 
   // Configurable contract address
   const [contractAddress, setContractAddress] = useState(() => {
-    return localStorage.getItem('aegisvote_contract_address') || DEFAULT_CONTRACT_ADDRESS;
+    return localStorage.getItem('mudraweb3_contract_address') || localStorage.getItem('janvox_contract_address') || localStorage.getItem('aegisvote_contract_address') || DEFAULT_CONTRACT_ADDRESS;
   });
 
   // Real Web3 state
@@ -180,21 +180,21 @@ export function Web3Provider({ children }) {
   const [blocks, setBlocks] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [receipts, setReceipts] = useState(() => {
-    const cached = localStorage.getItem('aegisvote_receipts');
+    const cached = localStorage.getItem('mudraweb3_receipts') || localStorage.getItem('janvox_receipts') || localStorage.getItem('aegisvote_receipts');
     return cached ? JSON.parse(cached) : {};
   });
 
   // Save config
   useEffect(() => {
-    localStorage.setItem('aegisvote_mode', providerMode);
+    localStorage.setItem('mudraweb3_mode', providerMode);
   }, [providerMode]);
 
   useEffect(() => {
-    localStorage.setItem('aegisvote_contract_address', contractAddress);
+    localStorage.setItem('mudraweb3_contract_address', contractAddress);
   }, [contractAddress]);
 
   useEffect(() => {
-    localStorage.setItem('aegisvote_receipts', JSON.stringify(receipts));
+    localStorage.setItem('mudraweb3_receipts', JSON.stringify(receipts));
   }, [receipts]);
 
   // Active address & role determination

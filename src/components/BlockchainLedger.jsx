@@ -37,7 +37,7 @@ export default function BlockchainLedger() {
 
   const exportLedgerJson = () => {
     const data = {
-      protocol: "AegisVote Decentralized E-Voting Protocol",
+      protocol: "Mudra Web3 Architecture Decentralized E-Voting Protocol",
       contractAddress,
       exportTimestamp: new Date().toISOString(),
       blockHeight: blocks[blocks.length - 1]?.number || 100000,
@@ -48,7 +48,7 @@ export default function BlockchainLedger() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AegisVote-Ledger-Audit-${Date.now()}.json`;
+    a.download = `MudraWeb3-Ledger-Audit-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };

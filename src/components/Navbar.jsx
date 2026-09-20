@@ -69,13 +69,13 @@ export default function Navbar({ activeTab, setActiveTab }) {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-lg tracking-tight text-slate-900">
-                  Aegis<span className="text-blue-600">Vote</span>
+                  Mudra <span className="text-blue-600">Web3</span>
                 </span>
                 <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                   {providerMode === 'REAL_BLOCKCHAIN' ? 'Live Web3' : 'Sandbox'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 hidden sm:block">Official E-Voting System</p>
+              <p className="text-[11px] font-medium text-slate-500 hidden sm:block">Mudra Web3 Architecture</p>
             </div>
           </div>
 

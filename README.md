@@ -1,6 +1,7 @@
-# AegisVote: Decentralized Blockchain E-Voting System (Real Blockchain & EVM Ready)
+# Mudra Web3 Architecture
+> Decentralized Blockchain E-Voting System (Real Blockchain & EVM Ready)
 
-**AegisVote** is an Ethereum/EVM-native decentralized e-voting system designed to eliminate the systemic flaws inherent in traditional voting mechanisms:
+**Mudra Web3 Architecture** is an Ethereum/EVM-native decentralized e-voting system designed to eliminate the systemic flaws inherent in traditional voting mechanisms:
 - **Tampering & Single Points of Failure**: Eliminated via distributed EVM ledgers where state changes require cryptographic consensus and are immutable.
 - **Double Voting & Sybil Attacks**: Prevented on-chain through cryptographic whitelist enforcement and strict `require(!hasVoted)` smart contract assertions.
 - **Lack of End-to-End Auditability**: Solved via Keccak-256 cryptographic ballot receipts, enabling voters to independently verify ballot inclusion on the ledger without revealing their identity.
@@ -10,11 +11,11 @@
 
 ## Real Blockchain Architecture
 
-AegisVote communicates directly with live EVM networks via `ethers.js` v6 and injected Web3 providers (MetaMask, Rabby, Coinbase Wallet):
+Mudra Web3 Architecture communicates directly with live EVM networks via `ethers.js` v6 and injected Web3 providers (MetaMask, Rabby, Coinbase Wallet):
 
 ```
 +-----------------------------------------------------------------------------------+
-|                            AegisVote React 19 Frontend                            |
+|                            Mudra Web3 Architecture React 19 Frontend                            |
 +-----------------------------------------+-----------------------------------------+
                                           |
                          +----------------+----------------+
@@ -84,7 +85,7 @@ A local Ethereum blockchain gives you real blocks, real mining, real transaction
      - Chain ID: `31337`
      - Currency Symbol: `ETH`
    - Import any of the test private keys printed by `npm run node:local` (e.g. Account #0: `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`).
-   - Click **Connect MetaMask** in the navbar. AegisVote will interact with the real blockchain!
+   - Click **Connect MetaMask** in the navbar. Mudra Web3 Architecture will interact with the real blockchain!
 
 ---
 
@@ -98,7 +99,7 @@ A local Ethereum blockchain gives you real blocks, real mining, real transaction
    node scripts/deploy.js
    ```
 
-2. **In AegisVote**:
+2. **In Mudra Web3 Architecture**:
    - Connect your MetaMask wallet.
    - Use the network switcher in the top bar to switch to **Ethereum Sepolia Testnet** or **Polygon Amoy**.
    - Click the **Settings (gear icon)** in the navbar to enter or update your deployed contract address.
@@ -124,7 +125,7 @@ If you don't have MetaMask or a local blockchain running, switch to **Sandbox No
 
 ## Cryptographic Security & Audit Guarantees
 
-| Vulnerability | Traditional Flaw | AegisVote Blockchain Solution |
+| Vulnerability | Traditional Flaw | Mudra Web3 Architecture Blockchain Solution |
 | :--- | :--- | :--- |
 | **Ballot Stuffing** | Malicious officials inject fake ballots | Cryptographic whitelist gating: only registered addresses can cast, exactly once |
 | **Retroactive Alteration** | Database or boxes altered after close | Cryptographically chained blocks with Keccak-256 state roots make modification mathematically impossible |
