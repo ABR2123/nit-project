@@ -15,31 +15,31 @@ export const TEST_ACCOUNTS = [
     role: 'Admin',
     address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     balance: '100.00 ETH',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'
+    avatar: ''
   },
   {
     id: 'voter1',
-    name: 'Elena Rostova',
+    name: 'Abhijith',
     role: 'Registered Voter',
     address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
     balance: '25.50 ETH',
-    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100'
+    avatar: ''
   },
   {
     id: 'voter2',
-    name: 'Marcus Chen',
+    name: 'Kelvin',
     role: 'Registered Voter',
     address: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
     balance: '14.20 ETH',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100'
+    avatar: ''
   },
   {
     id: 'voter3',
-    name: 'Aria Vance',
+    name: 'Kailas',
     role: 'Unregistered Citizen',
     address: '0x90F79bf6EB2c4f870365E785982E1f101E93b906',
     balance: '8.75 ETH',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100'
+    avatar: ''
   }
 ];
 
@@ -81,26 +81,26 @@ const INITIAL_SIMULATED_ELECTIONS = [
     candidates: [
       {
         id: 1,
-        name: 'Dr. Sarah Lin',
+        name: 'Abhijith',
         party: 'Scaling & Cryptography Alliance',
         manifesto: 'Leading core Ethereum researcher focused on ZK-rollups, post-quantum signatures, and sub-second decentralized finality.',
-        avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300',
+        avatarUrl: '',
         voteCount: 2
       },
       {
         id: 2,
-        name: 'Jonathan Hayes',
+        name: 'Kelvin',
         party: 'Smart Contract Security Council',
         manifesto: 'Formal verification pioneer committed to zero-exploit standards, automated audits, and bug bounty treasuries.',
-        avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300',
+        avatarUrl: '',
         voteCount: 1
       },
       {
         id: 3,
-        name: 'Maya Patel',
+        name: 'Kailas',
         party: 'Public Goods & Quadratic DAO',
         manifesto: 'Empowering open-source developers with retroactive public goods funding and sybil-resistant democratic voting protocols.',
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300',
+        avatarUrl: '',
         voteCount: 0
       }
     ],
@@ -128,18 +128,26 @@ const INITIAL_SIMULATED_ELECTIONS = [
     candidates: [
       {
         id: 1,
-        name: 'Alex Rivera',
+        name: 'Abhijith',
         party: 'Open Weights Alliance',
         manifesto: 'Advocating for fully auditable open-source model weights, distributed checkpoint validation, and anti-monopoly AI licensing.',
-        avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300',
+        avatarUrl: '',
         voteCount: 0
       },
       {
         id: 2,
-        name: 'Sophia Kim',
+        name: 'Kelvin',
         party: 'Zero-Knowledge Alignment Lab',
         manifesto: 'Deploying cryptographic zk-proofs of training alignment, privacy-preserving fine-tuning, and algorithmic accountability.',
-        avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300',
+        avatarUrl: '',
+        voteCount: 0
+      },
+      {
+        id: 3,
+        name: 'Kailas',
+        party: 'AI Ethics & Alignment Collective',
+        manifesto: 'Establishing transparent safety benchmarks and decentralized governance over frontier models.',
+        avatarUrl: '',
         voteCount: 0
       }
     ],

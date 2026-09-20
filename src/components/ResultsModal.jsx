@@ -177,7 +177,9 @@ CRYPTOGRAPHIC GUARANTEES:
                   <div key={c.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <img src={c.avatarUrl} alt={c.name} className="w-10 h-10 rounded-xl object-cover border border-slate-200" />
+                        <div className="w-10 h-10 rounded-xl bg-[#0F2A57] border border-[#FF9933]/50 flex items-center justify-center flex-shrink-0 text-white font-bold text-xs">
+                          {c.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                        </div>
                         <div>
                           <div className="flex items-center gap-2">
                             <h5 className="text-sm font-bold text-slate-900">{c.name}</h5>

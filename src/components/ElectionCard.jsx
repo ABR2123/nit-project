@@ -129,7 +129,11 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
               return (
                 <div key={cand.id} className="flex items-center justify-between text-xs p-2 rounded-lg bg-slate-50 border border-slate-100">
                   <div className="flex items-center gap-2.5 truncate">
-                    <img src={cand.avatarUrl} alt={cand.name} className="w-5 h-5 rounded-full object-cover border border-slate-200" />
+                    <div className="w-5 h-5 rounded-sm bg-[#0F2A57] border border-[#FF9933]/50 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-[7px] font-bold leading-none">
+                        {cand.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </span>
+                    </div>
                     <span className="font-semibold text-slate-800 truncate">{cand.name}</span>
                     {isWinner && (
                       <span className="flex items-center gap-1 text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded font-semibold">
@@ -186,7 +190,7 @@ export default function ElectionCard({ election, onVoteClick, onViewResultsClick
           {isActive && !hasVoted && (
             <button
               onClick={() => onVoteClick(election)}
-              className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
+              className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-[#0F2A57] hover:bg-[#1A3F7A] text-white font-semibold text-xs shadow-xs transition-all"
             >
               <Vote className="w-4 h-4" />
               Cast Ballot

@@ -1,21 +1,111 @@
 import React, { useState } from 'react';
 import { useWeb3 } from '../context/Web3Context';
-import { 
-  X, 
-  Vote, 
-  CheckCircle2, 
-  AlertCircle, 
-  Lock, 
-  Copy, 
-  ExternalLink, 
-  Download, 
-  Fingerprint, 
+import {
+  CheckCircle2,
+  AlertCircle,
+  Lock,
+  Copy,
+  Download,
+  Fingerprint,
   ShieldCheck,
   Clock,
-  Loader2
+  ChevronLeft,
+  ArrowRight,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
+// ─── Formal candidate silhouette badge ───────────────────────────────────────
+function CandidateBadge({ name }) {
+  const initials = name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+  return (
+    <div className="w-16 h-16 rounded-none bg-[#0F2A57] border-2 border-[#FF9933] flex flex-col items-center justify-center flex-shrink-0">
+      {/* Universal silhouette SVG */}
+      <svg viewBox="0 0 40 44" className="w-7 h-7" fill="white" opacity="0.65">
+        <circle cx="20" cy="12" r="9" />
+        <path d="M2 44c0-9.941 8.059-18 18-18s18 8.059 18 18z" />
+      </svg>
+      <span className="text-white text-[8px] font-bold tracking-widest mt-0.5 leading-none">
+        {initials}
+      </span>
+    </div>
+  );
+}
+
+// ─── Step constants ───────────────────────────────────────────────────────────
+const STEPS = [
+  { id: 1, label: 'Identity\nVerified' },
+  { id: 2, label: 'Select\nCandidate' },
+  { id: 3, label: 'Review &\nConfirm' },
+  { id: 4, label: 'Ledger\nSeal' },
+];
+
+function stepIndexFromState(step) {
+  if (step === 'select') return 2;
+  if (step === 'confirm') return 3;
+  if (step === 'submitting' || step === 'success') return 4;
+  return 2;
+}
+
+// ─── Progress bar ─────────────────────────────────────────────────────────────
+function ProgressBar({ step }) {
+  const activeStep = stepIndexFromState(step);
+  const isSuccess = step === 'success';
+  return (
+    <div className="flex items-stretch w-full">
+      {STEPS.map((s, idx) => {
+        const isDone = s.id < activeStep || (s.id === 4 && isSuccess);
+        const isActive = s.id === activeStep && !isSuccess;
+        const connector = idx < STEPS.length - 1;
+        return (
+          <React.Fragment key={s.id}>
+            <div className="flex flex-col items-center flex-1 pt-3 pb-2 px-1">
+              {/* Circle */}
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center border-2 text-sm font-bold transition-all ${
+                  isDone
+                    ? 'bg-[#138808] border-[#138808] text-white'
+                    : isActive
+                    ? 'bg-[#FF9933] border-[#FF9933] text-white'
+                    : 'bg-[#1A3A6A] border-[#2A4A80] text-[#4A7AAA]'
+                }`}
+              >
+                {isDone ? <CheckCircle2 className="w-4 h-4" /> : s.id}
+              </div>
+              {/* Label */}
+              <p
+                className={`mt-1.5 text-[9px] font-semibold uppercase tracking-wide text-center leading-tight whitespace-pre-line ${
+                  isDone
+                    ? 'text-[#138808]'
+                    : isActive
+                    ? 'text-[#FF9933]'
+                    : 'text-[#4A7AAA]'
+                }`}
+              >
+                {s.label}
+              </p>
+            </div>
+            {/* Connector line */}
+            {connector && (
+              <div className="flex items-start pt-7">
+                <div
+                  className={`h-0.5 w-6 sm:w-10 transition-all ${
+                    s.id < activeStep ? 'bg-[#138808]' : 'bg-[#1A3A6A]'
+                  }`}
+                />
+              </div>
+            )}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
 export default function BallotModal({ election, onClose, onReceiptReady }) {
   const { castVote, activeAddress } = useWeb3();
 
@@ -33,29 +123,23 @@ export default function BallotModal({ election, onClose, onReceiptReady }) {
   const isExpired = now > election.endTime;
   const isNotStarted = now < election.startTime;
 
+  const selectedCandidate = election.candidates.find((c) => c.id === selectedCandidateId);
+  const canSelect =
+    isWhitelisted && !hasAlreadyVoted && !isExpired && !isNotStarted && !election.isFinalized;
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleConfirmVote = async () => {
     if (!selectedCandidateId) return;
     setError(null);
     setStep('submitting');
-
     try {
       const generatedReceipt = await castVote(election.id, selectedCandidateId);
       setReceipt(generatedReceipt);
       setStep('success');
-      
-      // Celebrate successful decentralized vote casting
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-
-      if (onReceiptReady) {
-        onReceiptReady(generatedReceipt);
-      }
+      if (onReceiptReady) onReceiptReady(generatedReceipt);
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Failed to submit vote to blockchain');
+      setError(err.message || 'Failed to record ballot on the distributed ledger.');
       setStep('select');
     }
   };
@@ -70,8 +154,8 @@ export default function BallotModal({ election, onClose, onReceiptReady }) {
   const handleDownloadReceipt = () => {
     if (!receipt) return;
     const content = `=====================================================
-MUDRA WEB3 ARCHITECTURE DECENTRALIZED E-VOTING PROTOCOL
-CRYPTOGRAPHIC BALLOT RECEIPT
+ELECTION COMMISSION OF INDIA
+DIGITAL VOTING TERMINAL — OFFICIAL BALLOT RECEIPT
 =====================================================
 Election ID: #${receipt.electionId}
 Election Title: ${receipt.electionTitle}
@@ -79,317 +163,409 @@ Voter Address: ${receipt.voter}
 Selected Candidate: ${receipt.candidateName}
 Timestamp: ${new Date(receipt.timestamp * 1000).toUTCString()}
 
-BLOCKCHAIN AUDIT PROOF:
+DISTRIBUTED LEDGER AUDIT PROOF:
 Block Number: #${receipt.blockNumber}
-Transaction Hash: ${receipt.txHash}
-Receipt Hash (SHA-256 / Keccak-256):
+Distributed Ledger Seal: ${receipt.txHash}
+Cryptographic Ballot Receipt:
 ${receipt.receiptHash}
 
 VERIFICATION INSTRUCTIONS:
-Paste the receipt hash into the Mudra Web3 Architecture "Verify Receipt" portal
-or inspect directly on-chain via smart contract method:
-verifyReceipt(${receipt.electionId}, "${receipt.receiptHash}")
+Paste the Cryptographic Ballot Receipt into the
+"Verify Ballot" portal to independently confirm
+that your vote remains untampered on the national
+distributed ledger.
 
-STATUS: VALID & RECORDED IMMUTABLY ON LEDGER
+STATUS: VALID & RECORDED IMMUTABLY
 =====================================================`;
-
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `MudraWeb3-Receipt-Election-${receipt.electionId}.txt`;
+    a.download = `BallotReceipt-Election-${receipt.electionId}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const selectedCandidate = election.candidates.find(c => c.id === selectedCandidateId);
-
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-white">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-blue-50 text-blue-600 border border-blue-100">
-              <Vote className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 tracking-tight">Official Ballot Booth</h2>
-              <p className="text-xs text-slate-500 truncate max-w-md">{election.title}</p>
+    /* Full-screen kiosk overlay — covers the navbar entirely */
+    <div className="fixed inset-0 z-[100] flex flex-col bg-[#0F2A57] overflow-hidden">
+
+      {/* ── India tricolor accent bar ── */}
+      <div className="flex h-1.5 w-full flex-shrink-0">
+        <div className="flex-1 bg-[#FF9933]" />
+        <div className="flex-1 bg-white" />
+        <div className="flex-1 bg-[#138808]" />
+      </div>
+
+      {/* ── Institutional header ── */}
+      <div className="bg-[#0A1E40] border-b border-[#1A3A6A] px-6 py-3 flex-shrink-0">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#FF9933]">
+              Election Commission · Digital Voting Terminal
+            </p>
+            <h1 className="text-white font-bold text-base mt-0.5 leading-tight">
+              {election.title}
+            </h1>
+          </div>
+          {/* Voter credential chip */}
+          <div className="text-right">
+            <p className="text-[9px] font-semibold tracking-widest uppercase text-[#4A7AAA]">
+              Voter Identification
+            </p>
+            <p className="font-mono text-[11px] text-[#7AAED4] mt-0.5">
+              {activeAddress.slice(0, 8)}…{activeAddress.slice(-6)}
+            </p>
+            <div className="mt-1">
+              {!isWhitelisted ? (
+                <span className="inline-flex items-center gap-1 text-[10px] text-rose-400 bg-rose-900/40 border border-rose-700/50 px-2 py-0.5 rounded font-semibold">
+                  <AlertCircle className="w-3 h-3" /> Not Registered
+                </span>
+              ) : hasAlreadyVoted ? (
+                <span className="inline-flex items-center gap-1 text-[10px] text-amber-300 bg-amber-900/30 border border-amber-700/40 px-2 py-0.5 rounded font-semibold">
+                  <CheckCircle2 className="w-3 h-3" /> Ballot Cast
+                </span>
+              ) : isExpired ? (
+                <span className="inline-flex items-center gap-1 text-[10px] text-slate-400 bg-slate-800/50 border border-slate-600/40 px-2 py-0.5 rounded font-semibold">
+                  <Clock className="w-3 h-3" /> Voting Closed
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[10px] text-[#138808] bg-[#138808]/10 border border-[#138808]/40 px-2 py-0.5 rounded font-semibold">
+                  <CheckCircle2 className="w-3 h-3" /> Verified Voter
+                </span>
+              )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ── 4-step progress bar ── */}
+      <div className="bg-[#0A1E40] border-b border-[#1A3A6A] px-4 flex-shrink-0">
+        <div className="max-w-3xl mx-auto">
+          <ProgressBar step={step} />
+        </div>
+      </div>
+
+      {/* ── Error banner ── */}
+      {error && (
+        <div className="bg-rose-900/60 border-b border-rose-700 px-6 py-3 flex items-center gap-3 flex-shrink-0">
+          <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+          <p className="text-rose-200 text-sm flex-1">{error}</p>
           <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+            onClick={() => setError(null)}
+            className="text-rose-400 hover:text-rose-200 text-xs font-semibold px-3 py-1 border border-rose-700 rounded"
           >
-            <X className="w-5 h-5" />
+            Dismiss
           </button>
         </div>
+      )}
 
-        {/* Voter status alert bar */}
-        <div className="px-5 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-500">Voter Key:</span>
-            <span className="font-mono text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200 font-medium">
-              {activeAddress.slice(0, 10)}...{activeAddress.slice(-6)}
-            </span>
-          </div>
-          <div>
-            {!isWhitelisted ? (
-              <span className="inline-flex items-center gap-1 text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md font-medium">
-                <AlertCircle className="w-3.5 h-3.5" />
-                Not Registered
-              </span>
-            ) : hasAlreadyVoted ? (
-              <span className="inline-flex items-center gap-1 text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Ballot Already Cast
-              </span>
-            ) : isExpired ? (
-              <span className="inline-flex items-center gap-1 text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md font-medium">
-                <Clock className="w-3.5 h-3.5" />
-                Election Closed
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Eligible to Vote
-              </span>
-            )}
-          </div>
-        </div>
+      {/* ── Scrollable body ── */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-4">
 
-        {/* Body content */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-1">
-          {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* STEP 1: SELECT CANDIDATE */}
+          {/* ── STEP: SELECT CANDIDATE ── */}
           {step === 'select' && (
             <div>
-              <p className="text-xs text-slate-500 mb-3">
-                Select your preferred candidate or choice below. Once submitted, your ballot is cryptographically confirmed and recorded on-chain.
+              <p className="text-[#7AAED4] text-sm mb-4 leading-relaxed">
+                Select your preferred candidate below. Your selection will be reviewed
+                before submission to the national distributed ledger.
               </p>
 
               <div className="space-y-3">
                 {election.candidates.map((cand) => {
                   const isSelected = selectedCandidateId === cand.id;
-                  const canSelect = isWhitelisted && !hasAlreadyVoted && !isExpired && !isNotStarted && !election.isFinalized;
-
                   return (
                     <div
                       key={cand.id}
                       onClick={() => canSelect && setSelectedCandidateId(cand.id)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer relative ${
+                      className={`p-5 border-2 transition-all flex items-start gap-4 min-h-[90px] ${
                         isSelected
-                          ? 'bg-blue-50/60 border-blue-600 ring-1 ring-blue-600 shadow-xs'
+                          ? 'bg-[#FFF8F0] border-[#FF9933] shadow-lg shadow-[#FF9933]/10'
                           : canSelect
-                          ? 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
-                          : 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
+                          ? 'bg-[#0A1E40] border-[#1A3A6A] hover:border-[#2A5A9A] cursor-pointer'
+                          : 'bg-[#080F1E] border-[#1A3A6A]/50 opacity-50 cursor-not-allowed'
                       }`}
                     >
-                      <div className="flex items-start gap-3.5">
-                        <img
-                          src={cand.avatarUrl}
-                          alt={cand.name}
-                          className="w-12 h-12 rounded-xl object-cover border border-slate-200 flex-shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="text-sm font-bold text-slate-900">{cand.name}</h3>
-                              <span className="inline-block text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded mt-1">
-                                {cand.party}
-                              </span>
-                            </div>
-                            <div className="flex items-center">
-                              <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                      <CandidateBadge name={cand.name} />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <h3
+                              className={`text-base font-bold leading-tight ${
+                                isSelected ? 'text-[#0F2A57]' : 'text-white'
+                              }`}
+                            >
+                              {cand.name}
+                            </h3>
+                            <span
+                              className={`inline-block text-xs font-semibold px-2.5 py-0.5 mt-1.5 border ${
                                 isSelected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                              }`}>
-                                {isSelected && <CheckCircle2 className="w-4 h-4 text-white fill-current" />}
-                              </div>
-                            </div>
+                                  ? 'bg-[#FF9933]/20 text-[#8B4400] border-[#FF9933]/50'
+                                  : 'bg-[#FF9933]/10 text-[#FF9933] border-[#FF9933]/30'
+                              }`}
+                            >
+                              {cand.party}
+                            </span>
                           </div>
-                          <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
-                            {cand.manifesto}
-                          </p>
+                          {/* Selection indicator */}
+                          <div
+                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+                              isSelected
+                                ? 'border-[#FF9933] bg-[#FF9933]'
+                                : 'border-[#2A5A9A] bg-transparent'
+                            }`}
+                          >
+                            {isSelected && (
+                              <CheckCircle2 className="w-4 h-4 text-white fill-current" />
+                            )}
+                          </div>
                         </div>
+                        <p
+                          className={`text-xs mt-2 leading-relaxed line-clamp-2 ${
+                            isSelected ? 'text-[#3A4A5A]' : 'text-[#4A7AAA]'
+                          }`}
+                        >
+                          {cand.manifesto}
+                        </p>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
+              {/* Not registered notice */}
               {!isWhitelisted && (
-                <div className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-600" />
-                  <div>
-                    <p className="font-semibold">Address Not Whitelisted</p>
-                    <p className="text-amber-700 mt-0.5">
-                      This address has not been added to the election whitelist. To test voting, switch your account to "Elena Rostova" or "Marcus Chen" in the top bar, or add this address in the Admin Studio.
-                    </p>
+                <div className="mt-4 p-4 border border-amber-700/50 bg-amber-900/20">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-amber-300 font-semibold text-sm">Address Not Registered</p>
+                      <p className="text-amber-400/80 text-xs mt-1 leading-relaxed">
+                        This voter address has not been added to the electoral roll for this election.
+                        Contact the Election Administrator or switch to a registered voter account.
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
 
               {hasAlreadyVoted && (
-                <div className="mt-4 p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 flex items-start gap-2.5">
-                  <Lock className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-600" />
-                  <div>
-                    <p className="font-semibold">Single-Vote Restriction Active</p>
-                    <p className="text-blue-700 mt-0.5">
-                      Your address has already submitted a verified vote for this election. Each eligible voter can only cast one ballot.
-                    </p>
+                <div className="mt-4 p-4 border border-[#138808]/50 bg-[#138808]/10">
+                  <div className="flex items-start gap-3">
+                    <Lock className="w-5 h-5 text-[#138808] flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[#5AE875] font-semibold text-sm">
+                        Single-Ballot Restriction Active
+                      </p>
+                      <p className="text-[#5AE875]/70 text-xs mt-1 leading-relaxed">
+                        Your voter address has already submitted a verified ballot for this election.
+                        Each registered voter may cast exactly one ballot.
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
           )}
 
-          {/* STEP 2: CONFIRM & REVIEW CRYPTOGRAPHY */}
+          {/* ── STEP: CONFIRM & REVIEW ── */}
           {step === 'confirm' && selectedCandidate && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Your Selected Candidate</p>
-                <div className="flex items-center gap-3 mt-3">
-                  <img src={selectedCandidate.avatarUrl} alt={selectedCandidate.name} className="w-12 h-12 rounded-xl object-cover border border-slate-200" />
+              <p className="text-[#7AAED4] text-sm leading-relaxed">
+                Please review your selection carefully. Once submitted, your ballot is permanently
+                recorded on the national distributed ledger and cannot be altered.
+              </p>
+
+              {/* Selected candidate review card */}
+              <div className="p-5 border-2 border-[#FF9933] bg-[#FFF8F0]">
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#8B4400] mb-3">
+                  Your Selected Candidate
+                </p>
+                <div className="flex items-center gap-4">
+                  <CandidateBadge name={selectedCandidate.name} />
                   <div>
-                    <h3 className="text-base font-bold text-slate-900">{selectedCandidate.name}</h3>
-                    <p className="text-xs text-slate-500">{selectedCandidate.party}</p>
+                    <h3 className="text-xl font-bold text-[#0F2A57]">{selectedCandidate.name}</h3>
+                    <p className="text-sm text-[#8B4400] font-medium mt-1">{selectedCandidate.party}</p>
+                    <p className="text-xs text-slate-600 mt-2 max-w-sm leading-relaxed">
+                      {selectedCandidate.manifesto}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200 space-y-2.5">
-                <div className="flex items-center gap-2 text-blue-900 text-xs font-semibold uppercase tracking-wider">
-                  <Fingerprint className="w-4 h-4 text-blue-600" />
-                  <span>Cryptographic Receipt Generation</span>
+              {/* Security information panel */}
+              <div className="p-4 border border-[#1A3A6A] bg-[#0A1E40]">
+                <div className="flex items-center gap-2 mb-2">
+                  <Fingerprint className="w-4 h-4 text-[#FF9933]" />
+                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#FF9933]">
+                    Cryptographic Ballot Receipt
+                  </span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Upon confirmation, the smart contract registers your vote and computes an immutable Keccak-256 receipt hash. You can use this receipt hash at any time to verify that your ballot was properly counted in the final ledger.
+                <p className="text-xs text-[#4A7AAA] leading-relaxed">
+                  Upon confirmation, your ballot is registered on the national distributed ledger
+                  and an immutable receipt is generated. You may use this receipt at any time
+                  to verify that your vote was correctly recorded.
                 </p>
-                <div className="p-2.5 rounded-lg bg-white font-mono text-[11px] text-slate-600 border border-slate-200 break-all">
-                  Target: {election.title} | Voter: {activeAddress}
+                <div className="mt-2.5 p-2.5 bg-[#060D1A] border border-[#1A3A6A] font-mono text-[11px] text-[#4A90A4] break-all">
+                  Election: {election.title} | Voter: {activeAddress.slice(0, 12)}…
                 </div>
               </div>
             </div>
           )}
 
-          {/* STEP 3: SUBMITTING / MINING BLOCK */}
+          {/* ── STEP: SUBMITTING ── */}
           {step === 'submitting' && (
-            <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="py-16 flex flex-col items-center justify-center text-center space-y-6">
               <div className="relative">
-                <div className="w-14 h-14 rounded-full border-4 border-slate-200 border-t-blue-600 animate-spin"></div>
+                <div className="w-20 h-20 rounded-full border-4 border-[#1A3A6A] border-t-[#FF9933] animate-spin" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Lock className="w-5 h-5 text-blue-600" />
+                  <Lock className="w-7 h-7 text-[#FF9933]" />
                 </div>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-slate-900">Recording Ballot on Blockchain...</h3>
-                <p className="text-xs text-slate-500 mt-1 max-w-sm">
-                  Validating voter eligibility, executing smart contract, and generating tamper-proof cryptographic receipt.
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-white">Recording Ballot…</h3>
+                <p className="text-sm text-[#4A7AAA] max-w-sm leading-relaxed">
+                  Verifying voter eligibility, committing ballot to the distributed
+                  ledger, and generating your cryptographic receipt.
                 </p>
+              </div>
+              <div className="flex gap-1.5 mt-2">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="w-2 h-2 rounded-full bg-[#FF9933] animate-bounce"
+                    style={{ animationDelay: `${i * 0.15}s` }}
+                  />
+                ))}
               </div>
             </div>
           )}
 
-          {/* STEP 4: SUCCESS RECEIPT */}
+          {/* ── STEP: SUCCESS RECEIPT ── */}
           {step === 'success' && receipt && (
-            <div className="space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-                <div className="p-2 rounded-full bg-emerald-100 text-emerald-700 flex-shrink-0">
-                  <ShieldCheck className="w-6 h-6" />
+            <div className="space-y-4">
+              {/* Success banner */}
+              <div className="p-5 border-2 border-[#138808] bg-[#138808]/10 flex items-center gap-4">
+                <div className="p-3 rounded-full bg-[#138808]/20 border border-[#138808]/40 flex-shrink-0">
+                  <ShieldCheck className="w-7 h-7 text-[#5AE875]" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-emerald-800">Ballot Successfully Recorded</h3>
-                  <p className="text-xs text-slate-600 mt-0.5">
-                    Your vote for <strong className="text-slate-900">{receipt.candidateName}</strong> was sealed into Block #{receipt.blockNumber}.
+                  <h3 className="text-base font-bold text-[#5AE875]">
+                    Ballot Successfully Recorded
+                  </h3>
+                  <p className="text-sm text-[#4A8A5A] mt-0.5">
+                    Your vote for{' '}
+                    <strong className="text-[#5AE875]">{receipt.candidateName}</strong>{' '}
+                    has been sealed into Block #{receipt.blockNumber} of the national
+                    distributed ledger.
                   </p>
                 </div>
               </div>
 
-              {/* Receipt Box */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <Fingerprint className="w-4 h-4 text-blue-600" />
+              {/* Receipt box */}
+              <div className="border border-[#1A3A6A] bg-[#0A1E40]">
+                <div className="px-4 py-3 border-b border-[#1A3A6A] flex items-center justify-between">
+                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#FF9933] flex items-center gap-2">
+                    <Fingerprint className="w-3.5 h-3.5" />
                     Cryptographic Ballot Receipt
                   </span>
-                  <span className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-medium">Verified On-Chain</span>
+                  <span className="text-[10px] text-[#5AE875] bg-[#138808]/20 border border-[#138808]/40 px-2 py-0.5 font-semibold">
+                    VERIFIED ON LEDGER
+                  </span>
                 </div>
 
-                <div className="p-3 rounded-lg bg-white border border-slate-200 font-mono text-xs text-slate-800 break-all selection:bg-blue-100">
-                  {receipt.receiptHash}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 rounded bg-white border border-slate-200">
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Block Number</span>
-                    <span className="font-mono text-slate-800 font-semibold">#{receipt.blockNumber}</span>
+                <div className="p-4 space-y-3">
+                  {/* Receipt hash */}
+                  <div className="p-3 bg-[#060D1A] border border-[#1A3A6A] font-mono text-xs text-[#7AAED4] break-all select-all">
+                    {receipt.receiptHash}
                   </div>
-                  <div className="p-2.5 rounded bg-white border border-slate-200">
-                    <span className="text-slate-400 block text-[10px] uppercase font-semibold">Timestamp</span>
-                    <span className="font-mono text-slate-800 font-semibold">{new Date(receipt.timestamp * 1000).toLocaleTimeString()}</span>
+
+                  {/* Metadata grid */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-3 bg-[#060D1A] border border-[#1A3A6A]">
+                      <span className="block text-[9px] font-bold uppercase tracking-widest text-[#4A7AAA] mb-1">
+                        Block Number
+                      </span>
+                      <span className="font-mono text-white font-bold">#{receipt.blockNumber}</span>
+                    </div>
+                    <div className="p-3 bg-[#060D1A] border border-[#1A3A6A]">
+                      <span className="block text-[9px] font-bold uppercase tracking-widest text-[#4A7AAA] mb-1">
+                        Timestamp
+                      </span>
+                      <span className="font-mono text-white font-bold">
+                        {new Date(receipt.timestamp * 1000).toLocaleTimeString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                {receipt.txHash && (
-                  <div className="p-2.5 rounded-lg bg-white border border-slate-200 text-xs">
-                    <span className="text-[10px] text-slate-400 uppercase block font-semibold">Transaction Hash</span>
-                    <span className="font-mono text-slate-700 text-[11px] break-all">{receipt.txHash}</span>
+                  {receipt.txHash && (
+                    <div className="p-3 bg-[#060D1A] border border-[#1A3A6A] text-xs">
+                      <span className="block text-[9px] font-bold uppercase tracking-widest text-[#4A7AAA] mb-1">
+                        Distributed Ledger Seal
+                      </span>
+                      <span className="font-mono text-[#7AAED4] text-[11px] break-all">
+                        {receipt.txHash}
+                      </span>
+                    </div>
+                  )}
+
+                  <p className="text-[11px] text-[#4A7AAA] leading-relaxed">
+                    Preserve this Cryptographic Ballot Receipt. Paste it into the{' '}
+                    <strong className="text-[#7AAED4]">Verify Ballot</strong> portal at any time
+                    to confirm your vote remains untampered on the ledger.
+                  </p>
+
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      onClick={handleCopyReceipt}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-[#1A3A6A] hover:border-[#FF9933] bg-[#060D1A] hover:bg-[#FF9933]/5 text-sm font-semibold text-[#7AAED4] hover:text-[#FF9933] transition-all"
+                    >
+                      <Copy className="w-4 h-4" />
+                      {copied ? 'Copied!' : 'Copy Receipt'}
+                    </button>
+                    <button
+                      onClick={handleDownloadReceipt}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-[#138808]/20 hover:bg-[#138808]/30 border border-[#138808]/50 hover:border-[#138808] text-sm font-semibold text-[#5AE875] transition-all"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download Receipt
+                    </button>
                   </div>
-                )}
-
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Keep this cryptographic receipt. You can paste it into the <strong>Verify Receipt</strong> page at any time to independently confirm that your vote remains untampered on the ledger.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <button
-                    onClick={handleCopyReceipt}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-all border border-slate-200 shadow-xs"
-                  >
-                    <Copy className="w-3.5 h-3.5 text-slate-500" />
-                    {copied ? 'Copied to Clipboard!' : 'Copy Hash Receipt'}
-                  </button>
-
-                  <button
-                    onClick={handleDownloadReceipt}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold transition-all border border-blue-200 shadow-xs"
-                  >
-                    <Download className="w-3.5 h-3.5 text-blue-600" />
-                    Download Receipt (.txt)
-                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
+      </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3">
+      {/* ── Footer action bar ── */}
+      <div className="bg-[#0A1E40] border-t border-[#1A3A6A] px-4 sm:px-6 py-4 flex-shrink-0">
+        <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+
           {step === 'select' && (
             <>
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all"
+                className="px-6 py-4 text-sm font-semibold text-[#4A7AAA] hover:text-white hover:bg-[#1A3A6A] transition-all border border-transparent hover:border-[#1A3A6A]"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setStep('confirm')}
-                disabled={!selectedCandidateId || !isWhitelisted || hasAlreadyVoted || isExpired || isNotStarted || election.isFinalized}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={
+                  !selectedCandidateId ||
+                  !isWhitelisted ||
+                  hasAlreadyVoted ||
+                  isExpired ||
+                  isNotStarted ||
+                  election.isFinalized
+                }
+                className="flex items-center gap-3 px-8 py-4 bg-[#FF9933] hover:bg-[#E8870A] text-white text-base font-bold disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-[#FF9933]/20"
               >
-                Review Selection
-                <Lock className="w-3.5 h-3.5" />
+                Proceed to Review
+                <ArrowRight className="w-5 h-5" />
               </button>
             </>
           )}
@@ -398,16 +574,17 @@ STATUS: VALID & RECORDED IMMUTABLY ON LEDGER
             <>
               <button
                 onClick={() => setStep('select')}
-                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all"
+                className="flex items-center gap-2 px-6 py-4 text-sm font-semibold text-[#4A7AAA] hover:text-white hover:bg-[#1A3A6A] border border-transparent hover:border-[#1A3A6A] transition-all"
               >
+                <ChevronLeft className="w-4 h-4" />
                 Back
               </button>
               <button
                 onClick={handleConfirmVote}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-all"
+                className="flex items-center gap-3 px-8 py-4 bg-[#138808] hover:bg-[#0F6606] text-white text-base font-bold transition-all shadow-lg shadow-[#138808]/20"
               >
-                Sign & Cast Ballot
-                <Vote className="w-3.5 h-3.5" />
+                <Lock className="w-5 h-5" />
+                Cast Official Ballot
               </button>
             </>
           )}
@@ -415,13 +592,19 @@ STATUS: VALID & RECORDED IMMUTABLY ON LEDGER
           {step === 'success' && (
             <button
               onClick={onClose}
-              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-all"
+              className="w-full py-4 bg-[#0F2A57] hover:bg-[#1A3F7A] border-2 border-[#FF9933] text-[#FF9933] text-base font-bold transition-all"
             >
-              Done
+              Complete — Return to Elections
             </button>
           )}
         </div>
+      </div>
 
+      {/* ── India tricolor bottom accent bar ── */}
+      <div className="flex h-1 w-full flex-shrink-0">
+        <div className="flex-1 bg-[#FF9933]" />
+        <div className="flex-1 bg-white" />
+        <div className="flex-1 bg-[#138808]" />
       </div>
     </div>
   );

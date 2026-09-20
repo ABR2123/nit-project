@@ -25,13 +25,15 @@ export default function App() {
     : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-blue-100 selection:text-blue-900">
-      
-      {/* Top Navbar */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-[#F0F2F7] text-slate-900 flex flex-col selection:bg-blue-100 selection:text-blue-900">
 
-      {/* Persona Context Pill (Subtle hint for sandbox mode) */}
-      {providerMode === 'SIMULATED' && (
+      {/* Top Navbar — hidden during voting to lock the kiosk to the task */}
+      {!currentVotingElection && (
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      )}
+
+      {/* Persona Context Pill — hidden during voting */}
+      {providerMode === 'SIMULATED' && !currentVotingElection && (
         <div className="bg-blue-50/80 border-b border-blue-100 py-2 px-4 text-center text-xs text-slate-600">
           <span className="text-blue-700 font-semibold">Active Persona:</span>{' '}
           <strong className="text-slate-900 font-semibold">{selectedAccount.name}</strong> ({selectedAccount.role})

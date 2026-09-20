@@ -234,11 +234,9 @@ export default function Navbar({ activeTab, setActiveTab }) {
                   onClick={() => setShowAccountDropdown(!showAccountDropdown)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-xs transition-all shadow-xs"
                 >
-                  <img
-                    src={selectedAccount.avatar}
-                    alt={selectedAccount.name}
-                    className="w-5 h-5 rounded-full object-cover border border-slate-200"
-                  />
+                  <div className="w-5 h-5 rounded-full bg-[#0F2A57] border border-slate-200 flex items-center justify-center flex-shrink-0 text-white font-bold text-[9px]">
+                    {selectedAccount.name[0]}
+                  </div>
                   <div className="text-left hidden sm:block">
                     <p className="font-semibold text-slate-800 truncate max-w-[120px]">{selectedAccount.name}</p>
                     <p className="text-[10px] text-slate-500 font-mono">{shortenAddress(selectedAccount.address)}</p>
@@ -267,7 +265,9 @@ export default function Navbar({ activeTab, setActiveTab }) {
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <img src={acc.avatar} alt={acc.name} className="w-7 h-7 rounded-full object-cover border border-slate-200" />
+                            <div className="w-7 h-7 rounded-full bg-[#0F2A57] border border-slate-200 flex items-center justify-center flex-shrink-0 text-white font-bold text-xs">
+                              {acc.name[0]}
+                            </div>
                             <div>
                               <p className="text-xs font-semibold text-slate-800">{acc.name}</p>
                               <div className="flex items-center gap-1.5">
