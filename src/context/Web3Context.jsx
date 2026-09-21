@@ -36,7 +36,7 @@ export const TEST_ACCOUNTS = [
   {
     id: 'voter3',
     name: 'Kailas',
-    role: 'Unregistered Citizen',
+    role: 'Registered Voter',
     address: '0x90F79bf6EB2c4f870365E785982E1f101E93b906',
     balance: '8.75 ETH',
     avatar: ''
@@ -107,7 +107,8 @@ const INITIAL_SIMULATED_ELECTIONS = [
     whitelisted: {
       '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266': true,
       '0x70997970c51812dc3a010c7d01b50e0d17dc79c8': true,
-      '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true
+      '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true,
+      '0x90f79bf6eb2c4f870365e785982e1f101e93b906': true
     },
     hasVoted: {
       '0x70997970c51812dc3a010c7d01b50e0d17dc79c8': true,
@@ -154,7 +155,8 @@ const INITIAL_SIMULATED_ELECTIONS = [
     whitelisted: {
       '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266': true,
       '0x70997970c51812dc3a010c7d01b50e0d17dc79c8': true,
-      '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true
+      '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true,
+      '0x90f79bf6eb2c4f870365e785982e1f101e93b906': true
     },
     hasVoted: {}
   }
@@ -587,7 +589,8 @@ export function Web3Provider({ children }) {
       whitelisted: {
         [activeAddress.toLowerCase()]: true,
         '0x70997970c51812dc3a010c7d01b50e0d17dc79c8': true,
-        '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true
+        '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc': true,
+        '0x90f79bf6eb2c4f870365e785982e1f101e93b906': true
       },
       hasVoted: {}
     };
